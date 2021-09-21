@@ -20,7 +20,6 @@ struct dirent* entry;
 struct stat file_st;
 
 int cmp(const void * a, const void * b); 
-int strmode(mode_t mode, char* buf);
 void func_3();
 void func_5(); // func for -l;
 
@@ -139,7 +138,7 @@ int main(int argc, char** argv)
 
 				while((entry = readdir(dir)) != NULL)
 				{
-					printf("%d - %s [%d] %d \n", entry->d_ino, entry->d_name, entry->d_type, entry->d_reclen);
+					printf("%d - %s [%d] %llu \n", entry->d_ino, entry->d_name, entry->d_type, entry->d_reclen);
 				}
 
 				closedir(dir);
@@ -156,8 +155,7 @@ int cmp(const void * a, const void * b) {
     return strcmp(*(char**)a, *(char**)b);
 }
 
-
-int strmode(mode_t mode, char* buf)
+void strmode(mode_t mode, char* buf)
 {
 	const char chars[] = "rwxrwxrwx";
 
@@ -205,7 +203,7 @@ void func_5()
 	}
 
 	qsort(Files, i, sizeof(char*), cmp);
-	printf("total \033[36m%lld\033[0m\n", blk_cnt);
+	printf("total \033[36m%zu\033[0m\n", blk_cnt);
 
 	for(int f = 0; f < i; f++)
 	{
@@ -238,18 +236,18 @@ void func_5()
 			if(S_ISDIR(file_st_1.st_mode))
 			{
 				printf("d%s  %d  %s  %8s", mode, file_st_1.st_nlink, pwd->pw_name, gro->gr_name);
-				printf(" %6ld  %2s \x1b[1;34m %-8s \x1b[0m \n", file_st_1.st_size, buf_time, Files[f]);
+				printf(" %6lld  %s \x1b[1;34m %-8s \x1b[0m \n", file_st_1.st_size, buf_time, Files[f]);
 			}
 			else
 			{
 				printf("-%s  %d  %s  %8s", mode, file_st_1.st_nlink, pwd->pw_name, gro->gr_name);
-				printf(" %6ld  %2s \x1b[1;32m %-8s \x1b[0m \n", file_st_1.st_size, buf_time, Files[f] );
+				printf(" %6lld  %2s \x1b[1;32m %-8s \x1b[0m \n", file_st_1.st_size, buf_time, Files[f] );
 			}
 		}
 		else
 		{
 			printf("-%s  %d  %s  %8s", mode, file_st_1.st_nlink, pwd->pw_name, gro->gr_name);
-			printf(" %6ld  %2s  %-8s  \n", file_st_1.st_size, buf_time, Files[f]);
+			printf(" %6lld  %2s  %-8s  \n", file_st_1.st_size, buf_time, Files[f]);
 		}
 	}
 	
