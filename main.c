@@ -19,7 +19,8 @@ DIR* dir;
 struct dirent* entry;
 struct stat file_st;
 
-int cmp(const void * a, const void * b); 
+int cmp(const void * a, const void * b);
+void fmode(mode_t mode, char* buf);
 void func_3();
 void func_5(); // func for -l;
 
@@ -138,7 +139,7 @@ int main(int argc, char** argv)
 
 				while((entry = readdir(dir)) != NULL)
 				{
-					printf("%d - %s [%d] %llu \n", entry->d_ino, entry->d_name, entry->d_type, entry->d_reclen);
+     					//printf("%d - %s [%d] %llu \n", entry->d_ino, entry->d_name, entry->d_type, entry->d_reclen);
 				}
 
 				closedir(dir);
@@ -155,7 +156,7 @@ int cmp(const void * a, const void * b) {
     return strcmp(*(char**)a, *(char**)b);
 }
 
-void strmode(mode_t mode, char* buf)
+void fmode(mode_t mode, char* buf)
 {
 	const char chars[] = "rwxrwxrwx";
 
@@ -213,7 +214,7 @@ void func_5()
 		fstatat(fd, Files[f],&file_st_1, 0);
 	
 		char mode[10];
-		strmode(file_st_1.st_mode, mode);
+		fmode(file_st_1.st_mode, mode);
 
 		struct passwd* pwd;
 		pwd = getpwuid(file_st_1.st_uid);
